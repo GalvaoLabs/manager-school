@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Início | Manager School{% endblock %}
+{% block content %}
+<section class="page-heading" aria-labelledby="page-title">
+    <p class="page-heading__eyebrow">ACOMPANHAMENTO ESCOLAR</p>
+    <h1 id="page-title">Notas e avaliações</h1>
+    <p>Registre resultados e consulte o histórico de cada aluno.</p>
+</section>
+
+<div class="home-layout">
+    <section class="panel home-layout__form" aria-labelledby="form-title">
+        <div class="panel__heading">
+            <div><p class="section-label">NOVO REGISTRO</p><h2 id="form-title">Registrar nota</h2></div>
+        </div>
+        <form action="{{ url_for('registrar_nota') }}" method="post" class="grade-form" data-loading-form>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <label class="field">Aluno
+                <select name="aluno_id" data-student-select>
+                    <option value="novo">Cadastrar um novo aluno</option>
+                    {% for id, nome, turma, ano in alunos %}
+                        <option value="{{ id }}">ID {{ id }} · {{ nome }} — {{ turma }} ({{ ano }})</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <div class="field-grid" data-new-student-fields>
+                <label class="field">Nome do aluno<input name="nome" maxlength="100" placeholder="Ex.: Ana Souza"></label>
+                <label class="field">Turma<input name="turma" maxlength="40" placeholder="Ex.: 2º A"></label>
+                <label class="field">Ano letivo<input name="ano" type="number" min="2000" max="2100" value="2026"></label>
+            </div>
+            <div class="field-grid field-grid--grade">
+                <label class="field">Disciplina<input name="disciplina" required maxlength="80" placeholder="Ex.: Matemática"></label>
+                <label class="field">Professor<input name="professor" required maxlength="100" placeholder="Nome do professor"></label>
+                <label class="field">Avaliação<input name="avaliacao" required maxlength="100" placeholder="Ex.: Prova 1"></label>
+                <label class="field">Bimestre<select name="bimestre"><option value="1">1º bimestre</option><option value="2">2º bimestre</option><option value="3">3º bimestre</option><option value="4">4º bimestre</option></select></label>
+                <label class="field">Nota<input name="nota" type="number" min="0" step="0.01" required placeholder="0 a 10"></label>
+                <label class="field">Nota máxima<input name="nota_maxima" type="number" min="0.01" step="0.01" value="10" required></label>
+            </div>
+            <button class="button button--primary" type="submit" data-loading-label="Salvando…">Salvar nota</button>
+        </form>
+    </section>
+
+    <section class="panel home-layout__students" aria-labelledby="students-title">
+        <div class="panel__heading panel__heading--split">
+            <div><p class="section-label">CADASTRO</p><h2 id="students-title">Alunos</h2></div>
+            <span class="count-label">{{ alunos|length }} registro(s)</span>
+        </div>
+        {% if alunos %}
+            <ul class="student-list">
+                {% for id, nome, turma, ano in alunos %}
+                    <li>
+                        <a class="student-list__link" href="{{ url_for('aluno', aluno_id=id) }}">
+                            <span class="student-list__initial" aria-hidden="true">{{ nome[:1]|upper }}</span>
+                            <span class="student-list__details"><strong>{{ nome }}</strong><small>ID {{ id }} · {{ turma }} ({{ ano }})</small></span>
+                            <span class="student-list__arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="empty-state"><strong>Nenhum aluno cadastrado</strong><p>Cadastre um aluno pelo formulário para começar a registrar notas.</p></div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
