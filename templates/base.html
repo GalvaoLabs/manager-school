@@ -33,6 +33,9 @@
         {% endif %}
     </header>
     <main class="page-shell">
+        {% if modo_demo %}
+            <div class="notice notice--info" role="status"><strong>Modo demonstração:</strong> os nomes e as notas são fictícios. Esta versão é somente para consulta.</div>
+        {% endif %}
         {% with mensagens = get_flashed_messages(with_categories=true) %}
             {% for categoria, mensagem in mensagens %}
                 <div class="notice notice--{{ categoria }}" role="{% if categoria == 'erro' %}alert{% else %}status{% endif %}">{{ mensagem }}</div>
@@ -43,3 +46,4 @@
     <footer class="site-footer"><span>Manager School</span><span>Protótipo acadêmico · dados para fins de demonstração</span></footer>
 </body>
 </html>
+
