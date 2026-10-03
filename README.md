@@ -7,36 +7,37 @@
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-Web-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 [![SQLite](https://img.shields.io/badge/SQLite-Banco_de_dados-003B57?logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![Licença MIT](https://img.shields.io/badge/Licen%C3%A7a-MIT-green.svg)](LICENSE)
 
 </div>
 
 ---
 
+## Demonstração online
+
+[Acessar o Manager School](https://manager-school-demo.onrender.com/)
+
+A demonstração usa dados fictícios e está disponível somente para consulta. O serviço gratuito pode entrar em repouso após um período sem acessos, então a primeira visita pode demorar. Como o armazenamento é temporário, os dados de demonstração podem ser recriados quando o serviço reiniciar.
+
 ## Sobre o projeto
 
-O Manager School permite organizar informações escolares e consultar o desempenho de alunos e turmas. A aplicação reúne cadastros, notas, médias, gráficos e exportação de relatórios.
+O Manager School é um projeto de estudo e portfólio desenvolvido durante o curso de **Programação em Python da Fábrica de Programadores**, realizado em parceria entre o [SENAI-SP](https://www.sp.senai.br/) e a [Prefeitura de Santana de Parnaíba](https://prefeitura.santanadeparnaiba.sp.gov.br/).
 
-O projeto começou como uma proposta de estudo e possível TCC durante o curso de **Programação em Python da Fábrica de Programadores**. O curso é realizado em parceria entre o [SENAI-SP](https://www.sp.senai.br/) e a [Prefeitura de Santana de Parnaíba](https://prefeitura.santanadeparnaiba.sp.gov.br/), com aulas ministradas por professores do SENAI e certificado emitido pelo SENAI.
+O objetivo é revisar conceitos do curso, praticar novas tecnologias e aprender construindo uma aplicação web. Ferramentas de inteligência artificial foram usadas como apoio; as soluções foram estudadas e revisadas durante o desenvolvimento.
 
-A formação contou com os professores [msousa07](https://github.com/msousa07) e **Hebert Félix**, que ministrou o primeiro módulo. Eles são mencionados aqui como parte do contexto do curso, não como orientadores ou colaboradores deste projeto.
-
-Meu objetivo principal com o Manager School é revisar conceitos aprendidos no curso, praticar novas tecnologias e construir um projeto para meu portfólio. A ideia de TCC foi o ponto de partida, mas o projeto não foi apresentado como trabalho oficial de conclusão de curso.
-
-Ferramentas de inteligência artificial foram utilizadas como apoio durante a análise, implementação e documentação. O desenvolvimento é acompanhado pelo autor, que também estuda e revisa as soluções aplicadas.
-
-> **Aviso:** este projeto é um protótipo de estudo. Utilize dados fictícios; ele não substitui um diário escolar oficial.
+> **Aviso:** este é um protótipo acadêmico e de portfólio. Use somente dados fictícios; o sistema não substitui um diário escolar oficial.
 
 ## Funcionalidades
 
 - Cadastrar alunos, turmas, disciplinas, professores, avaliações e notas.
 - Consultar o histórico e as médias de um aluno.
-- Editar ou excluir notas e remover um cadastro de aluno.
+- Editar ou excluir notas e remover cadastros de alunos.
 - Filtrar relatórios por turma e aluno.
 - Visualizar gráficos de médias por disciplina e bimestre.
 - Exportar relatórios em Excel, PDF ou CSV.
-- Usar tema claro ou escuro em telas adaptáveis a computador e celular.
-- Ativar login compartilhado no modo local; a demonstração pública não exige login.
-- Acessar uma demonstração pública em modo somente leitura, com dados fictícios.
+- Usar tema claro ou escuro em uma interface adaptável a computadores e celulares.
+- Ativar login compartilhado no modo local.
+- Consultar a demonstração pública, que não exige login e não permite alterações.
 
 ## Tecnologias
 
@@ -44,7 +45,7 @@ Ferramentas de inteligência artificial foram utilizadas como apoio durante a an
 |---|---|
 | Python e Flask | Rotas e funcionamento da aplicação web |
 | SQLite e SQL | Armazenamento e consulta dos dados |
-| Jinja, HTML e CSS | Estrutura e apresentação das páginas |
+| Jinja, HTML e CSS | Páginas e apresentação da interface |
 | JavaScript | Interações da interface |
 | pandas | Organização e análise dos dados dos relatórios |
 | Matplotlib | Geração dos gráficos |
@@ -56,14 +57,14 @@ Ferramentas de inteligência artificial foram utilizadas como apoio durante a an
 .
 ├── app.py                 aplicação Flask e geração dos relatórios
 ├── database.py            criação das tabelas e operações SQLite
-├── notas.py               versão de terminal para registrar e analisar notas
+├── notas.py               programa de terminal complementar, mantido para consulta
 ├── exemplo.py             exemplo de leitura dos dados
-├── demo_data.py           dados fictícios usados na demonstração pública
+├── demo_data.py           dados fictícios usados na demonstração
 ├── templates/             páginas HTML renderizadas pelo Jinja
 ├── static/                estilos CSS e JavaScript
 ├── docs/                  documentação e materiais do projeto
 ├── requirements.txt       dependências Python
-└── render.yaml            configuração preparada para o Render
+└── render.yaml            configuração de implantação no Render
 ```
 
 ## Como executar localmente
@@ -76,23 +77,36 @@ Crie um ambiente virtual:
 python -m venv .venv
 ```
 
-No Windows, ative o ambiente, instale as dependências e inicie a aplicação:
+Ative o ambiente virtual.
+
+**Windows (PowerShell):**
 
 ```powershell
-.\.venv\Scripts\Activate.ps1
+.\\.venv\\Scripts\\Activate.ps1
+```
+
+**macOS ou Linux:**
+
+```bash
+source .venv/bin/activate
+```
+
+Instale as dependências e inicie a aplicação:
+
+```bash
 python -m pip install -r requirements.txt
 python app.py
 ```
 
-Depois, acesse [http://127.0.0.1:5000](http://127.0.0.1:5000).
+Acesse [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
-O banco `manager_school.db` é criado automaticamente na primeira execução. Para ativar o login local, copie `.env.example` para `.env` e substitua os valores de exemplo. O arquivo `.env` está no `.gitignore` e não deve ser enviado ao GitHub. Sem `APP_PASSWORD`, o login fica desativado localmente.
+O banco SQLite é criado automaticamente na primeira execução. Para ativar o login local, copie `.env.example` para `.env` e troque os valores de exemplo por uma chave secreta e uma senha fortes. Sem `APP_PASSWORD`, o login local fica desativado. O arquivo `.env` é ignorado pelo Git e não deve ser enviado ao GitHub.
 
 ## Banco de dados e privacidade
 
 O SQLite relaciona turmas, alunos, disciplinas, professores, ofertas de disciplinas, avaliações e notas. Cada nota está associada a um aluno e a uma avaliação.
 
-O banco local é ignorado pelo Git porque pode conter dados pessoais. Use apenas nomes, turmas e notas fictícios nas demonstrações. O login atual usa uma credencial compartilhada e não possui contas ou permissões individuais.
+O banco local pode conter dados pessoais e não deve ser publicado. A demonstração online usa apenas dados fictícios. O login local atual usa uma credencial compartilhada e não oferece contas ou permissões individuais.
 
 ## Documentação
 
@@ -103,13 +117,21 @@ O banco local é ignorado pelo Git porque pode conter dados pessoais. Use apenas
 
 ## Hospedagem
 
-A configuração gratuita para uma demonstração no Render está em `render.yaml`. O modo público usa dados fictícios, bloqueia alterações e recria os registros quando o serviço inicia. Como a hospedagem gratuita não oferece disco persistente, a demonstração pode dormir e levar cerca de um minuto para abrir após um período sem acessos; consulte as [instruções de implantação](docs/implantacao.md). **O projeto ainda não está publicado na web.**
+A demonstração está hospedada gratuitamente no Render. A configuração está em `render.yaml`: o modo público usa dados fictícios, bloqueia alterações e recria os registros se o banco temporário for reiniciado. Consulte as [instruções de implantação](docs/implantacao.md) para detalhes sobre as limitações do plano gratuito.
+
+## Aprendizados e próximos passos
+
+Durante o desenvolvimento, pratiquei aplicações web com Flask, operações em banco relacional, filtros, geração de relatórios e configuração de uma demonstração hospedada.
+
+Como próximos passos, quero adicionar testes automatizados, estudar contas individuais de usuários e avaliar uma migração para PostgreSQL se o projeto precisar de armazenamento persistente.
 
 ## Limitações conhecidas
 
 - As médias são aritméticas simples.
-- Os critérios de aprovação e recuperação são provisórios e devem ser ajustados conforme as regras da escola.
-- O sistema ainda não possui perfis diferentes de usuário, trilha de auditoria nem rotina automática de backup.
+- Os critérios de aprovação e recuperação são provisórios e devem ser ajustados conforme as regras de cada escola.
+- O sistema ainda não possui perfis individuais de usuário, trilha de auditoria ou rotina automática de backup.
 - É um protótipo acadêmico e de portfólio, não um sistema escolar oficial.
 
+## Licença
 
+Este projeto está disponível sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE).
