@@ -1,38 +1,80 @@
+<div align="center">
+
 # Manager School
 
-Aplicação web acadêmica para registrar notas e acompanhar o desempenho de alunos por disciplina e bimestre. O projeto foi desenvolvido com Flask e SQLite, com relatórios em tabela e gráfico.
+**Aplicação web para registrar notas e acompanhar o desempenho de alunos por turma, disciplina e bimestre.**
 
-> Protótipo para demonstração. Use dados fictícios; o sistema não substitui um diário escolar oficial.
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-Web-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![SQLite](https://img.shields.io/badge/SQLite-Banco_de_dados-003B57?logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+
+</div>
+
+---
+
+## Sobre o projeto
+
+O Manager School permite organizar informações escolares e consultar o desempenho de alunos e turmas. A aplicação reúne cadastros, notas, médias, gráficos e exportação de relatórios.
+
+O projeto começou como uma proposta de estudo e possível TCC durante o curso de **Programação em Python da Fábrica de Programadores**. O curso é realizado em parceria entre o [SENAI-SP](https://www.sp.senai.br/) e a [Prefeitura de Santana de Parnaíba](https://prefeitura.santanadeparnaiba.sp.gov.br/), com aulas ministradas por professores do SENAI e certificado emitido pelo SENAI.
+
+A formação contou com os professores [msousa07](https://github.com/msousa07) e **Hebert Félix**, que ministrou o primeiro módulo. Eles são mencionados aqui como parte do contexto do curso, não como orientadores ou colaboradores deste projeto.
+
+Meu objetivo principal com o Manager School é revisar conceitos aprendidos no curso, praticar novas tecnologias e construir um projeto para meu portfólio. A ideia de TCC foi o ponto de partida, mas o projeto não foi apresentado como trabalho oficial de conclusão de curso.
+
+Ferramentas de inteligência artificial foram utilizadas como apoio durante a análise, implementação e documentação. O desenvolvimento é acompanhado pelo autor, que também estuda e revisa as soluções aplicadas.
+
+> **Aviso:** este projeto é um protótipo de estudo. Utilize dados fictícios; ele não substitui um diário escolar oficial.
 
 ## Funcionalidades
 
 - Cadastrar alunos, turmas, disciplinas, professores, avaliações e notas.
 - Consultar o histórico e as médias de um aluno.
-- Editar ou excluir uma nota e remover um cadastro de aluno.
+- Editar ou excluir notas e remover um cadastro de aluno.
 - Filtrar relatórios por turma e aluno.
-- Visualizar um gráfico de médias por disciplina e bimestre.
-- Baixar relatórios em Excel, PDF ou CSV.
-- Usar tema claro ou escuro e telas adaptáveis a celular e computador.
-- Proteger a aplicação com senha quando `APP_PASSWORD` estiver configurada.
+- Visualizar gráficos de médias por disciplina e bimestre.
+- Exportar relatórios em Excel, PDF ou CSV.
+- Usar tema claro ou escuro em telas adaptáveis a computador e celular.
+- Ativar uma tela de login por senha para demonstrações.
 
 ## Tecnologias
 
-- Python e Flask para as rotas e páginas web.
-- SQLite para armazenar os dados.
-- Jinja para montar as páginas HTML.
-- pandas para agrupar e calcular os dados dos relatórios.
-- Matplotlib para gerar gráficos.
-- openpyxl para gerar arquivos Excel.
+| Tecnologia | Uso |
+|---|---|
+| Python e Flask | Rotas e funcionamento da aplicação web |
+| SQLite e SQL | Armazenamento e consulta dos dados |
+| Jinja, HTML e CSS | Estrutura e apresentação das páginas |
+| JavaScript | Interações da interface |
+| pandas | Organização e análise dos dados dos relatórios |
+| Matplotlib | Geração dos gráficos |
+| openpyxl | Criação de planilhas Excel |
 
-## Executar localmente
+## Estrutura do repositório
+
+```text
+.
+├── app.py                 aplicação Flask e geração dos relatórios
+├── database.py            criação das tabelas e operações SQLite
+├── notas.py               versão de terminal para registrar e analisar notas
+├── exemplo.py             exemplo de leitura dos dados
+├── templates/             páginas HTML renderizadas pelo Jinja
+├── static/                estilos CSS e JavaScript
+├── docs/                  documentação e materiais do projeto
+├── requirements.txt       dependências Python
+└── render.yaml            configuração preparada para o Render
+```
+
+## Como executar localmente
 
 É necessário ter Python 3.10 ou mais recente.
+
+Crie um ambiente virtual:
 
 ```bash
 python -m venv .venv
 ```
 
-No Windows, ative o ambiente e instale as bibliotecas:
+No Windows, ative o ambiente, instale as dependências e inicie a aplicação:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
@@ -40,54 +82,32 @@ python -m pip install -r requirements.txt
 python app.py
 ```
 
-Abra `http://127.0.0.1:5000`. O banco `manager_school.db` é criado na pasta do projeto na primeira execução.
+Depois, acesse [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
-Para habilitar senha local, copie `.env.example` para `.env` e substitua os valores de `SECRET_KEY`, `APP_USERNAME` e `APP_PASSWORD`. Sem `APP_PASSWORD`, o login fica desativado no ambiente local.
+O banco `manager_school.db` é criado automaticamente na primeira execução. Para ativar o login local, copie `.env.example` para `.env` e substitua os valores de exemplo. O arquivo `.env` está no `.gitignore` e não deve ser enviado ao GitHub. Sem `APP_PASSWORD`, o login fica desativado localmente.
 
-## Estrutura
+## Banco de dados e privacidade
 
-```text
-app.py                 rotas Flask, validações e geração dos relatórios
-database.py            criação das tabelas e operações SQLite
-templates/             páginas Jinja
-static/                estilos e JavaScript
-templates/login.html  tela de acesso usada na hospedagem
-docs/                  documentação e instruções de implantação
-notas.py               versão de terminal do projeto
-exemplo.py             exemplo de leitura dos dados
-requirements.txt       dependências Python
-render.yaml            configuração do serviço no Render
-```
+O SQLite relaciona turmas, alunos, disciplinas, professores, ofertas de disciplinas, avaliações e notas. Cada nota está associada a um aluno e a uma avaliação.
 
-## Banco de dados
+O banco local é ignorado pelo Git porque pode conter dados pessoais. Use apenas nomes, turmas e notas fictícios nas demonstrações. O login atual usa uma credencial compartilhada e não possui contas ou permissões individuais.
 
-O SQLite relaciona turmas, alunos, disciplinas, professores, ofertas de disciplinas, avaliações e notas. Cada nota aponta para um aluno e uma avaliação. O código cria as tabelas automaticamente ao iniciar a aplicação.
+## Documentação
 
-O arquivo local do banco é ignorado pelo Git porque pode conter informações de alunos. Para publicar uma demonstração, cadastre apenas dados fictícios.
+- [Documentação técnica](docs/documentacao.md)
+- [Instruções de implantação](docs/implantacao.md)
+- [Apresentação do projeto](docs/Apresentacao_Manager_School.pptx)
+- [Relatório do projeto](docs/Relatorio_Manager_School.docx)
 
-## Implantação
+## Hospedagem
 
-Consulte [docs/implantacao.md](docs/implantacao.md). A configuração `render.yaml` usa um serviço web com disco persistente porque o banco SQLite precisa sobreviver a reinícios e novas versões.
+A configuração inicial para o Render está em `render.yaml`, incluindo armazenamento persistente para o banco SQLite. **O projeto ainda não está publicado na web**: a configuração precisa ser ativada em uma conta Render. Consulte as [instruções de implantação](docs/implantacao.md) antes de publicar.
 
-## Documentação do TCC
-
-- [Documento do projeto](docs/documentacao.md) — escopo, requisitos, arquitetura, banco de dados e limitações.
-- [Apresentação em PowerPoint](docs/Apresentacao_Manager_School.pptx)
-- [Relatório em Word](docs/Relatorio_Manager_School.docx)
-
-Preencha os campos de instituição, curso, autores, orientação e data com os dados oficiais antes de entregar o relatório à escola.
-
-## Regras e limitações conhecidas
+## Limitações conhecidas
 
 - As médias são aritméticas simples.
-- As faixas de aprovação no histórico são provisórias: aprovado a partir de 6; recuperação a partir de 5; abaixo de 5 aparece como reprovado. Ajuste-as aos critérios definidos pela escola.
-- O projeto é um protótipo acadêmico; não possui perfis diferentes de usuário, trilha de auditoria nem rotina de backup.
-- A tela de login é uma proteção básica para demonstração e não substitui um sistema completo de gestão de identidade.
+- Os critérios de aprovação e recuperação são provisórios e devem ser ajustados conforme as regras da escola.
+- O sistema ainda não possui perfis diferentes de usuário, trilha de auditoria nem rotina automática de backup.
+- É um protótipo acadêmico e de portfólio, não um sistema escolar oficial.
 
-## Versão de terminal
 
-O projeto também mantém uma interface de terminal:
-
-```bash
-python notas.py
-```
