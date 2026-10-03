@@ -14,14 +14,14 @@
         <div class="table-scroll" role="region" aria-label="Tabela de notas. Use a rolagem horizontal para ver todas as colunas." tabindex="0">
             <table class="data-table">
                 <caption class="visually-hidden">Notas de {{ aluno[1] }} por disciplina, professor e bimestre</caption>
-                <thead><tr><th scope="col">Disciplina e avaliação</th><th scope="col">Professor</th><th scope="col">Bimestre</th><th scope="col">Nota</th><th scope="col">Ações</th></tr></thead>
+                <thead><tr><th scope="col">Disciplina e avaliação</th><th scope="col">Professor</th><th scope="col">Bimestre</th><th scope="col">Nota</th>{% if not modo_demo %}<th scope="col">Ações</th>{% endif %}</tr></thead>
                 <tbody>
                     {% for nota_id, disciplina, professor, avaliacao, bimestre, valor, maximo in notas %}
                     <tr>
                         <td><strong>{{ disciplina }}</strong><small>{{ avaliacao }}</small></td>
                         <td>{{ professor }}</td><td>{{ bimestre }}º</td>
                         <td class="numeric">{{ "%.2f"|format(valor) }} / {{ "%.2f"|format(maximo) }}</td>
-                        <td class="table-actions">
+                        {% if not modo_demo %}<td class="table-actions">
                             <form class="edit-grade" action="{{ url_for('editar_nota', nota_id=nota_id) }}" method="post" data-loading-form>
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                                 <input type="hidden" name="aluno_id" value="{{ aluno[0] }}">
@@ -34,7 +34,7 @@
                                 <input type="hidden" name="aluno_id" value="{{ aluno[0] }}">
                                 <button class="button button--small button--danger" type="submit" data-loading-label="Excluindo…">Excluir</button>
                             </form>
-                        </td>
+                        </td>{% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -66,7 +66,7 @@
     {% endif %}
 </section>
 
-<section class="panel panel--warning panel--wide" aria-labelledby="remove-student-title">
+{% if not modo_demo %}<section class="panel panel--warning panel--wide" aria-labelledby="remove-student-title">
     <div class="panel__heading"><div><p class="section-label">CADASTRO</p><h2 id="remove-student-title">Remover aluno</h2></div></div>
     <p class="panel__description">A remoção também apaga as notas relacionadas a este cadastro.</p>
     <form action="{{ url_for('remover_aluno', aluno_id=aluno[0]) }}" method="post" data-confirm="Remover este aluno e todas as notas dele?" data-loading-form>
@@ -74,4 +74,6 @@
         <button class="button button--danger" type="submit" data-loading-label="Removendo…">Excluir aluno</button>
     </form>
 </section>
+{% endif %}
 {% endblock %}
+
