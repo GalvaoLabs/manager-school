@@ -357,6 +357,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .notice { grid-column: 1 / -1; padding: var(--space-3) var(--space-4); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-control); background: var(--color-surface); font-size: var(--text-small); }
 .notice--sucesso { border-color: var(--color-success); color: var(--color-success); }
 .notice--erro { border-color: var(--color-danger); color: var(--color-danger); }
+.notice--info { border-color: var(--color-accent); background: var(--color-accent-soft); color: var(--color-text); }
 .empty-state { padding: var(--space-6) var(--space-4); border: var(--border-width) dashed var(--color-border); border-radius: var(--radius-small); color: var(--color-muted); }
 .empty-state strong { display: block; color: var(--color-text); font-size: var(--text-body); }
 .empty-state p { max-width: 58ch; margin: var(--space-2) 0 0; font-size: var(--text-small); }
@@ -430,3 +431,4 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto; animation-duration: 1ms; animation-iteration-count: 1; transition-duration: 1ms; }
 }
+
