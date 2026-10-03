@@ -35,7 +35,8 @@ Ferramentas de inteligência artificial foram utilizadas como apoio durante a an
 - Visualizar gráficos de médias por disciplina e bimestre.
 - Exportar relatórios em Excel, PDF ou CSV.
 - Usar tema claro ou escuro em telas adaptáveis a computador e celular.
-- Ativar uma tela de login por senha para demonstrações.
+- Ativar login compartilhado no modo local; a demonstração pública não exige login.
+- Acessar uma demonstração pública em modo somente leitura, com dados fictícios.
 
 ## Tecnologias
 
@@ -57,6 +58,7 @@ Ferramentas de inteligência artificial foram utilizadas como apoio durante a an
 ├── database.py            criação das tabelas e operações SQLite
 ├── notas.py               versão de terminal para registrar e analisar notas
 ├── exemplo.py             exemplo de leitura dos dados
+├── demo_data.py           dados fictícios usados na demonstração pública
 ├── templates/             páginas HTML renderizadas pelo Jinja
 ├── static/                estilos CSS e JavaScript
 ├── docs/                  documentação e materiais do projeto
@@ -101,7 +103,7 @@ O banco local é ignorado pelo Git porque pode conter dados pessoais. Use apenas
 
 ## Hospedagem
 
-A configuração inicial para o Render está em `render.yaml`, incluindo armazenamento persistente para o banco SQLite. **O projeto ainda não está publicado na web**: a configuração precisa ser ativada em uma conta Render. Consulte as [instruções de implantação](docs/implantacao.md) antes de publicar.
+A configuração gratuita para uma demonstração no Render está em `render.yaml`. O modo público usa dados fictícios, bloqueia alterações e recria os registros quando o serviço inicia. Como a hospedagem gratuita não oferece disco persistente, a demonstração pode dormir e levar cerca de um minuto para abrir após um período sem acessos; consulte as [instruções de implantação](docs/implantacao.md). **O projeto ainda não está publicado na web.**
 
 ## Limitações conhecidas
 
