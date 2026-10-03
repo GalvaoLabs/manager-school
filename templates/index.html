@@ -4,14 +4,18 @@
 <section class="page-heading" aria-labelledby="page-title">
     <p class="page-heading__eyebrow">ACOMPANHAMENTO ESCOLAR</p>
     <h1 id="page-title">Notas e avaliações</h1>
-    <p>Registre resultados e consulte o histórico de cada aluno.</p>
+    <p>{% if modo_demo %}Consulte históricos fictícios e relatórios de desempenho.{% else %}Registre resultados e consulte o histórico de cada aluno.{% endif %}</p>
 </section>
 
 <div class="home-layout">
     <section class="panel home-layout__form" aria-labelledby="form-title">
         <div class="panel__heading">
-            <div><p class="section-label">NOVO REGISTRO</p><h2 id="form-title">Registrar nota</h2></div>
+            <div><p class="section-label">{% if modo_demo %}VISÃO GERAL{% else %}NOVO REGISTRO{% endif %}</p><h2 id="form-title">{% if modo_demo %}Explore a demonstração{% else %}Registrar nota{% endif %}</h2></div>
         </div>
+        {% if modo_demo %}
+            <p class="panel__description">Consulte os históricos e relatórios usando uma turma ou um aluno de exemplo. Os dados são recriados quando a demonstração reinicia.</p>
+            <a class="button button--primary" href="{{ url_for('relatorios') }}">Ver relatórios</a>
+        {% else %}
         <form action="{{ url_for('registrar_nota') }}" method="post" class="grade-form" data-loading-form>
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <label class="field">Aluno
@@ -37,6 +41,7 @@
             </div>
             <button class="button button--primary" type="submit" data-loading-label="Salvando…">Salvar nota</button>
         </form>
+        {% endif %}
     </section>
 
     <section class="panel home-layout__students" aria-labelledby="students-title">
@@ -62,3 +67,4 @@
     </section>
 </div>
 {% endblock %}
+
