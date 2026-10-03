@@ -21,7 +21,7 @@ A demonstração usa dados fictícios e está disponível somente para consulta.
 
 ## Sobre o projeto
 
-O Manager School é um projeto de estudo e portfólio desenvolvido durante o curso de **Programação em Python da Fábrica de Programadores**, realizado em parceria entre o [SENAI-SP](https://www.sp.senai.br/) e a [Prefeitura de Santana de Parnaíba](https://prefeitura.santanadeparnaiba.sp.gov.br/).
+O Manager School é um projeto de estudo e portfólio desenvolvido pelo aluno Miguel Henrique S. Galvão ([GalvaoLabs](https://github.com/GalvaoLabs/)) durante o curso de **Programação em Python da Fábrica de Programadores**, realizado em parceria entre o [SENAI-SP](https://www.sp.senai.br/) e a [Prefeitura de Santana de Parnaíba](https://prefeitura.santanadeparnaiba.sp.gov.br/).
 
 O objetivo é revisar conceitos do curso, praticar novas tecnologias e aprender construindo uma aplicação web. Ferramentas de inteligência artificial foram usadas como apoio; as soluções foram estudadas e revisadas durante o desenvolvimento.
 
