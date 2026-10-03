@@ -2,22 +2,21 @@ services:
   - type: web
     name: manager-school
     runtime: python
-    plan: starter
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
     healthCheckPath: /healthz
-    disk:
-      name: manager-school-data
-      mountPath: /var/data
-      sizeGB: 1
     envVars:
       - key: SECRET_KEY
         generateValue: true
-      - key: APP_USERNAME
-        value: apresentacao
-      - key: APP_PASSWORD
-        generateValue: true
       - key: DATABASE_PATH
-        value: /var/data/manager_school.db
+        value: /tmp/manager_school.db
       - key: COOKIE_SECURE
         value: "1"
+      - key: DEMO_MODE
+        value: "1"
+      - key: TRUST_X_FORWARDED_FOR
+        value: "1"
+      - key: RATELIMIT_STORAGE_URI
+        value: memory://
+
