@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}{{ aluno[1] }} | Manager School{% endblock %}
+{% block content %}
+<a class="back-link" href="{{ url_for('inicio') }}">← Voltar aos alunos</a>
+<section class="page-heading page-heading--compact" aria-labelledby="page-title">
+    <p class="page-heading__eyebrow">ID {{ aluno[0] }} · {{ aluno[2] }} · {{ aluno[3] }}</p>
+    <h1 id="page-title">{{ aluno[1] }}</h1>
+    <p>Histórico de avaliações e médias por disciplina.</p>
+</section>
+
+<section class="panel panel--wide" aria-labelledby="grades-title">
+    <div class="panel__heading"><div><p class="section-label">HISTÓRICO</p><h2 id="grades-title">Notas registradas</h2></div></div>
+    {% if notas %}
+        <div class="table-scroll" role="region" aria-label="Tabela de notas. Use a rolagem horizontal para ver todas as colunas." tabindex="0">
+            <table class="data-table">
+                <caption class="visually-hidden">Notas de {{ aluno[1] }} por disciplina, professor e bimestre</caption>
+                <thead><tr><th scope="col">Disciplina e avaliação</th><th scope="col">Professor</th><th scope="col">Bimestre</th><th scope="col">Nota</th><th scope="col">Ações</th></tr></thead>
+                <tbody>
+                    {% for nota_id, disciplina, professor, avaliacao, bimestre, valor, maximo in notas %}
+                    <tr>
+                        <td><strong>{{ disciplina }}</strong><small>{{ avaliacao }}</small></td>
+                        <td>{{ professor }}</td><td>{{ bimestre }}º</td>
+                        <td class="numeric">{{ "%.2f"|format(valor) }} / {{ "%.2f"|format(maximo) }}</td>
+                        <td class="table-actions">
+                            <form class="edit-grade" action="{{ url_for('editar_nota', nota_id=nota_id) }}" method="post" data-loading-form>
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                <input type="hidden" name="aluno_id" value="{{ aluno[0] }}">
+                                <label class="visually-hidden" for="grade-{{ nota_id }}">Nova nota para {{ disciplina }}</label>
+                                <input id="grade-{{ nota_id }}" name="nota" type="number" min="0" max="{{ maximo }}" step="0.01" value="{{ valor }}" required>
+                                <button class="button button--small button--quiet" type="submit" data-loading-label="Salvando…">Atualizar</button>
+                            </form>
+                            <form action="{{ url_for('remover_nota', nota_id=nota_id) }}" method="post" data-confirm="Excluir esta nota?" data-loading-form>
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                <input type="hidden" name="aluno_id" value="{{ aluno[0] }}">
+                                <button class="button button--small button--danger" type="submit" data-loading-label="Excluindo…">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state"><strong>Este aluno ainda não tem notas</strong><p>Volte à página inicial para cadastrar uma avaliação.</p></div>
+    {% endif %}
+</section>
+
+<section class="panel panel--wide" aria-labelledby="averages-title">
+    <div class="panel__heading"><div><p class="section-label">RESULTADOS</p><h2 id="averages-title">Médias por período</h2></div></div>
+    {% if medias %}
+        <div class="table-scroll" role="region" aria-label="Tabela de médias. Use a rolagem horizontal para ver todas as colunas." tabindex="0">
+            <table class="data-table">
+                <caption class="visually-hidden">Médias por disciplina e bimestre de {{ aluno[1] }}</caption>
+                <thead><tr><th scope="col">Disciplina</th><th scope="col">Bimestre</th><th scope="col">Média</th><th scope="col">Avaliações</th><th scope="col">Situação*</th></tr></thead>
+                <tbody>
+                    {% for disciplina, bimestre, media, quantidade in medias %}
+                    <tr><td>{{ disciplina }}</td><td>{{ bimestre }}º</td><td class="numeric">{{ "%.2f"|format(media) }}</td><td>{{ quantidade }}</td>
+                        <td>{% if media >= 6 %}<span class="status status--success">Aprovado</span>{% elif media >= 5 %}<span class="status status--warning">Recuperação</span>{% else %}<span class="status status--error">Reprovado</span>{% endif %}</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <p class="field-note">* Faixas provisórias: aprovado a partir de 6; recuperação a partir de 5.</p>
+    {% else %}
+        <div class="empty-state"><strong>As médias aparecerão aqui</strong><p>Cadastre notas para este aluno e o resumo será calculado por período.</p></div>
+    {% endif %}
+</section>
+
+<section class="panel panel--warning panel--wide" aria-labelledby="remove-student-title">
+    <div class="panel__heading"><div><p class="section-label">CADASTRO</p><h2 id="remove-student-title">Remover aluno</h2></div></div>
+    <p class="panel__description">A remoção também apaga as notas relacionadas a este cadastro.</p>
+    <form action="{{ url_for('remover_aluno', aluno_id=aluno[0]) }}" method="post" data-confirm="Remover este aluno e todas as notas dele?" data-loading-form>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button class="button button--danger" type="submit" data-loading-label="Removendo…">Excluir aluno</button>
+    </form>
+</section>
+{% endblock %}
