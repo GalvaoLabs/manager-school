@@ -1,5 +1,6 @@
 """Interface web simples para consultar e registrar notas escolares."""
 import hmac
+import ipaddress
 import os
 import secrets
 from io import BytesIO
@@ -10,6 +11,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 from flask import Flask, Response, abort, flash, redirect, render_template, request, send_file, session, url_for
+from flask_limiter import Limiter
 from openpyxl import load_workbook
 from openpyxl.chart import BarChart, Reference
 from openpyxl.styles import Font, PatternFill
@@ -48,8 +50,11 @@ from database import (
     consultar_notas_do_aluno,
     consultar_medias_por_materia_e_bimestre,
     salvar_nota,
+    salvar_dados_do_aluno,
     atualizar_nota,
 )
+
+MODO_DEMO = os.environ.get("DEMO_MODE", "0") == "1"
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or secrets.token_hex(32)
@@ -59,7 +64,26 @@ app.config.update(
     SESSION_COOKIE_SECURE=os.environ.get("COOKIE_SECURE", "0") == "1",
 )
 USUARIO_APP = os.environ.get("APP_USERNAME", "admin")
-SENHA_APP = os.environ.get("APP_PASSWORD", "")
+SENHA_APP = "" if MODO_DEMO else os.environ.get("APP_PASSWORD", "")
+
+
+def identificar_cliente():
+    """Usa o IP encaminhado pelo proxy confiável do Render quando habilitado."""
+    if os.environ.get("TRUST_X_FORWARDED_FOR") == "1":
+        ip_encaminhado = request.headers.get("X-Forwarded-For", "").split(",", 1)[0].strip()
+        try:
+            return str(ipaddress.ip_address(ip_encaminhado))
+        except ValueError:
+            pass
+    return request.remote_addr or "desconhecido"
+
+
+limiter = Limiter(
+    key_func=identificar_cliente,
+    app=app,
+    default_limits=["300 per hour", "2000 per day"],
+    storage_uri=os.environ.get("RATELIMIT_STORAGE_URI", "memory://"),
+)
 
 
 @app.context_processor
@@ -73,12 +97,16 @@ def fornecer_dados_de_seguranca():
         "csrf_token": token,
         "login_ativo": bool(SENHA_APP),
         "usuario_autenticado": bool(session.get("autenticado")),
+        "modo_demo": MODO_DEMO,
     }
 
 
 @app.before_request
 def proteger_paginas_e_formularios():
     """Exige login quando há senha configurada e valida envios de formulários."""
+    if MODO_DEMO and request.method == "POST":
+        abort(403, description="A demonstração é somente para consulta.")
+
     if request.endpoint not in {"login", "static", "healthz"} and SENHA_APP:
         if not session.get("autenticado"):
             return redirect(url_for("login", proximo=request.full_path))
@@ -91,6 +119,7 @@ def proteger_paginas_e_formularios():
 
 
 @app.route("/login", methods=["GET", "POST"])
+@limiter.limit("5 per minute; 20 per hour", methods=["POST"], override_defaults=False)
 def login():
     """Autentica o acesso público quando APP_PASSWORD está configurada."""
     if not SENHA_APP:
@@ -113,6 +142,27 @@ def login():
         flash("Usuário ou senha incorretos.", "erro")
 
     return render_template("login.html", proximo=request.args.get("proximo", ""))
+
+
+@app.errorhandler(429)
+def limite_de_acesso_excedido(_erro):
+    """Explica em português quando o limite temporário de acessos é atingido."""
+    return Response(
+        "Muitas solicitações em pouco tempo. Aguarde alguns minutos e tente novamente.",
+        status=429,
+        mimetype="text/plain",
+    )
+
+
+@app.errorhandler(403)
+def demonstracao_somente_consulta(_erro):
+    if MODO_DEMO:
+        return Response(
+            "Esta demonstração é somente para consulta; os dados não podem ser alterados.",
+            status=403,
+            mimetype="text/plain",
+        )
+    return Response("Acesso não permitido.", status=403, mimetype="text/plain")
 
 
 @app.post("/logout")
@@ -522,7 +572,14 @@ def baixar_pdf():
 
 
 criar_banco()
+if MODO_DEMO:
+    alunos_atuais = listar_alunos()
+    if not alunos_atuais:
+        from demo_data import popular_dados_demo
+
+        popular_dados_demo(salvar_dados_do_aluno)
 
 
 if __name__ == "__main__":
     app.run(debug=os.environ.get("FLASK_DEBUG", "1") == "1")
+
