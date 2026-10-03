@@ -82,7 +82,7 @@ Ative o ambiente virtual.
 **Windows (PowerShell):**
 
 ```powershell
-.\\.venv\\Scripts\\Activate.ps1
+.\.venv\Scripts\Activate.ps1
 ```
 
 **macOS ou Linux:**
